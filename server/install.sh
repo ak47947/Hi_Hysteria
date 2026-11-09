@@ -1,5 +1,7 @@
 #!/bin/bash
 hihyV="0.4.9"
+REPO_RAW="https://raw.githubusercontent.com/ak47947/Hi_Hysteria/main"
+REPO_WEB="https://github.com/ak47947/Hi_Hysteria"
 function echoColor() {
 	case $1 in
 		# 红色
@@ -109,11 +111,11 @@ function checkSystemForUpdate() {
 
 function uninstall(){
 	rm -r /usr/bin/hihy
-    bash <(curl -fsSL https://git.io/rmhysteria.sh)
+    bash <(curl -fsSL ${REPO_RAW}/server/uninstall.sh)
 }
 
 function reinstall(){
-    bash <(curl -fsSL https://git.io/rehysteria.sh)
+    bash <(curl -fsSL ${REPO_RAW}/server/reinstall.sh)
 }
 
 function printMsg(){
@@ -139,7 +141,7 @@ function printMsg(){
 
 function hihy(){
 	if [ ! -f "/usr/bin/hihy" ]; then
-  		wget -q -O /usr/bin/hihy --no-check-certificate https://raw.githubusercontent.com/emptysuns/Hi_Hysteria/main/server/install.sh
+  		wget -q -O /usr/bin/hihy --no-check-certificate ${REPO_RAW}/server/install.sh
 		chmod +x /usr/bin/hihy
 	fi	
 }
@@ -919,7 +921,7 @@ function changeServerConfig(){
 
 function hihyUpdate(){
 	localV=${hihyV}
-	remoteV=`curl -fsSL https://git.io/hysteria.sh | sed  -n 2p | cut -d '"' -f 2`
+	remoteV=`curl -fsSL ${REPO_RAW}/server/install.sh | sed  -n 2p | cut -d '"' -f 2`
 	if [ -z $remoteV ];then
 		echoColor red "Network Error: Can't connect to Github!"
 		exit
@@ -928,7 +930,7 @@ function hihyUpdate(){
 		echoColor green "Already the latest version.Ignore."
 	else
 		rm -r /usr/bin/hihy
-		wget -q -O /usr/bin/hihy --no-check-certificate https://raw.githubusercontent.com/emptysuns/Hi_Hysteria/main/server/install.sh 2>/dev/null
+		wget -q -O /usr/bin/hihy --no-check-certificate ${REPO_RAW}/server/install.sh 2>/dev/null
 		chmod +x /usr/bin/hihy
 		echoColor green "Done."
 	fi
@@ -937,12 +939,12 @@ function hihyUpdate(){
 
 function hihyNotify(){
 	localV=${hihyV}
-	remoteV=`curl -fsSL https://git.io/hysteria.sh | sed  -n 2p | cut -d '"' -f 2`
+	remoteV=`curl -fsSL ${REPO_RAW}/server/install.sh | sed  -n 2p | cut -d '"' -f 2`
 	if [ -z $remoteV ];then
 		echoColor red "Network Error: Can't connect to Github for checking hihy version!"
 	else
 		if [ "${localV}" != "${remoteV}" ];then
-			echoColor purple "[Update] hihy有更新,version:v${remoteV},建议更新并查看日志: https://github.com/emptysuns/Hi_Hysteria/commits/main"
+			echoColor purple "[Update] hihy有更新,version:v${remoteV},建议更新并查看日志: ${REPO_WEB}/commits/main"
 		fi
 	fi
 	
